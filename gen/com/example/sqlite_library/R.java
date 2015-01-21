@@ -1749,8 +1749,7 @@ containing a value of this type.
         public static int abc_search_dropdown_item_icons_2line=0x7f030014;
         public static int abc_search_view=0x7f030015;
         public static int abc_simple_dropdown_hint=0x7f030016;
-        public static int activity_main=0x7f030017;
-        public static int support_simple_spinner_dropdown_item=0x7f030018;
+        public static int support_simple_spinner_dropdown_item=0x7f030017;
     }
     public static final class menu {
         public static int main=0x7f0c0000;

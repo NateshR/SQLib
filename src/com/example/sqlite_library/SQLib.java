@@ -21,12 +21,13 @@ public class SQLib {
 
 	// Columns name defined by the user will be defined in this variable
 	private String[] columns_name;
-	private String defined_columns_name;
 
 	// TAGS
 	private final static String TAG_TABLE_CREATED = "TABLE_CREATED";
 	private final static String TAG_VALUE_ADDED = "VALUE_ADDED";
 	private final static String TAG_VALUE_DRAWN = "VALUE_DRAWN";
+	private final static String TAG_VALUE_DELETE = "VALUE DELETED";
+	private final static String TAG_VALUE_DELETE_TABLE = "TABLE DELETED";
 
 	private class DBhelper extends SQLiteOpenHelper {
 
@@ -94,8 +95,7 @@ public class SQLib {
 				statement = statement + ", " + columns[i].data_name + " "
 						+ columns[i].data_type + " "
 						+ columns[i].data_constraint_name;
-				defined_columns_name = defined_columns_name + ", "
-						+ columns[i].data_name;
+
 			}
 			this.columns_name[i] = columns[i].data_name;
 
@@ -118,12 +118,10 @@ public class SQLib {
 			if (values[k].length > max) {
 				max = values[k].length;
 			}
-
 		}
-		Log.d(TAG_VALUE_ADDED, "MAX: " + max);
-
 		ContentValues cv = new ContentValues();
 		for (int i = 0; i < max; i++) {
+
 			for (int j = 0; j < this.columns_name.length; j++) {
 
 				cv.put(this.columns_name[j], values[j][i]);
@@ -149,10 +147,9 @@ public class SQLib {
 		String[] result = new String[count];
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 			result[i] = c.getString(get);
+			Log.d(TAG_VALUE_DRAWN, "Drawn  " + result[i] + " from myTable");
 			i++;
-
 		}
-		Log.d(TAG_VALUE_DRAWN, count + " drawn from " + this.database_table);
 		return result;
 	}
 
@@ -160,8 +157,8 @@ public class SQLib {
 	// position(as position)
 	public String getPosition_data(String column_name, int position) {
 
-		Cursor c = ourDatabse.query(this.database_table, this.columns_name,
-				null, null, null, null, null);
+		Cursor c = this.ourDatabse.query(this.database_table,
+				this.columns_name, null, null, null, null, null);
 		int get = c.getColumnIndex(column_name);
 
 		int i = 0;
@@ -182,7 +179,13 @@ public class SQLib {
 	// value to be deleted(as name)
 	public void DeleteEntry(String column_name, String name) {
 
-		ourDatabse.delete(this.database_table, column_name + "='" + name + "'",
-				null);
+		this.ourDatabse.delete(this.database_table, column_name + "='" + name
+				+ "'", null);
+		Log.d(TAG_VALUE_DELETE, "Deleted: " + name);
+	}
+
+	public void DeleteAll() {
+		this.ourDatabse.delete(this.database_table, null, null);
+		Log.d(TAG_VALUE_DELETE_TABLE, "Deleted Table: " + this.database_table);
 	}
 }
